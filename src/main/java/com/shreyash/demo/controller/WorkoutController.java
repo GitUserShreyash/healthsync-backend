@@ -18,6 +18,8 @@ import com.shreyash.demo.dto.WorkoutPlanResponse;
 import com.shreyash.demo.service.IWorkoutPlanService;
 import com.shreyash.demo.service.IWorkoutService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/workout")
 public class WorkoutController {
@@ -38,7 +40,7 @@ public class WorkoutController {
     }
 	
 	@PostMapping("/log")
-    public ResponseEntity<WorkoutLogResponse> logWorkout(@RequestBody WorkoutLogRequest request) {
+    public ResponseEntity<WorkoutLogResponse> logWorkout(@Valid @RequestBody WorkoutLogRequest request) {
         return ResponseEntity.ok(workoutService.logWorkout(request));
     }
 	

@@ -9,13 +9,6 @@ import com.shreyash.demo.model.User;
 import com.shreyash.demo.model.WorkoutLog;
 
 public interface WorkoutLogRepository extends JpaRepository<WorkoutLog, Long> {
-	Optional<User> findByUsername(String username);
-
-    Optional<User> findByEmail(String email);
-
-    boolean existsByUsername(String username);
-
-    boolean existsByEmail(String email);
     
     List<WorkoutLog> findByUserOrderByLoggedAtDesc(User user);
     

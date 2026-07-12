@@ -14,12 +14,15 @@ import com.shreyash.demo.dto.ForgotPasswordRequest;
 import com.shreyash.demo.dto.LoginRequest;
 import com.shreyash.demo.dto.LoginResponse;
 import com.shreyash.demo.dto.ResetPasswordRequest;
+import com.shreyash.demo.dto.SignupRequest;
 import com.shreyash.demo.dto.UserResponse;
 import com.shreyash.demo.dto.VerifyEmailRequest;
 import com.shreyash.demo.model.User;
 import com.shreyash.demo.repo.UserRepository;
 import com.shreyash.demo.security.JWTUtilizer;
 import com.shreyash.demo.service.IAuthService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -40,13 +43,21 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
     }
 	
+    @PostMapping("/user/signup")
+    public ResponseEntity<String> signup(@Valid @RequestBody SignupRequest req){
+    	System.out.println("signup api is called");
+    	return ResponseEntity.ok(authService.signup(req));
+    }
+    
 	@PostMapping("/verify-email")
-	public ResponseEntity<String> verifyEmail(@RequestBody VerifyEmailRequest request){
+	public ResponseEntity<String> verifyEmail(@Valid @RequestBody VerifyEmailRequest request){
+		System.out.println("verify-email api is called");
 		return ResponseEntity.ok(authService.verifyEmail(request));
 	}
 	
 	@PostMapping("/user/login")
-	public ResponseEntity<?> login(@RequestBody LoginRequest request){
+	public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request){
+		System.out.println("login api is called");
 		User user = userRepo.findByEmail(request.getEmail())
 	            .orElse(null);
 
@@ -70,21 +81,23 @@ public class AuthController {
 	
 	@GetMapping("/me")
 	public ResponseEntity<UserResponse> getCurrentUser(){
+		System.out.println("me api is called");
 		return ResponseEntity.ok(authService.getCurrentUser());
 	}
 	
 	@PostMapping("/forgot-password")
-	public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequest req){
+	public ResponseEntity<String> forgotPassword(@Valid @RequestBody ForgotPasswordRequest req){
+		System.out.println("forgot-password api is called");
 		return ResponseEntity.ok(authService.forgotPassword(req));
 	}
 	
 	@PostMapping("/reset-password")
-	public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest req){
+	public ResponseEntity<String> resetPassword(@Valid @RequestBody ResetPasswordRequest req){
 		return ResponseEntity.ok(authService.resetPassword(req));
 	}
 	
 	@PostMapping("/change-password")
-	public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest req){
+	public ResponseEntity<String> changePassword(@Valid @RequestBody ChangePasswordRequest req){
 		return ResponseEntity.ok(authService.changePassword(req));
 	}
 }

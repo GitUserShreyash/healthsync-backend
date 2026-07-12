@@ -12,6 +12,8 @@ import com.shreyash.demo.dto.ProfileRequest;
 import com.shreyash.demo.dto.ProfileResponse;
 import com.shreyash.demo.service.IProfileService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api")
 public class ProfileController {
@@ -19,12 +21,12 @@ public class ProfileController {
 	private IProfileService profileService;
 	
 	@PutMapping("/profile")
-	public ResponseEntity<ProfileResponse> updateProfile(@RequestBody ProfileRequest req){
+	public ResponseEntity<ProfileResponse> updateProfile(@Valid @RequestBody ProfileRequest req){
 		return ResponseEntity.ok(profileService.updateProfile(req));
 	}
 	
 	@GetMapping("/profile")
-	public ResponseEntity<ProfileResponse> getProfile(@RequestBody ProfileRequest req){
+	public ResponseEntity<ProfileResponse> getProfile(@Valid @RequestBody ProfileRequest req){
 		return ResponseEntity.ok(profileService.getProfile());
 	}
 }

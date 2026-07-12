@@ -37,6 +37,6 @@ public class User {
 	
 	private LocalDateTime lastLoginAt;
 	
-	@OneToOne(mappedBy = "user_table" , cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "user" , cascade = CascadeType.ALL)
 	private UserProfile profile;
 }

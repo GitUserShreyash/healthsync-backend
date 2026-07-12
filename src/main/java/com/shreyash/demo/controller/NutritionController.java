@@ -8,12 +8,17 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.shreyash.demo.dto.DailyCaloriesResponse;
 import com.shreyash.demo.dto.NutritionLogRequest;
 import com.shreyash.demo.dto.NutritionLogResponse;
 import com.shreyash.demo.service.INutritionLogService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/nutrition")
@@ -23,7 +28,7 @@ public class NutritionController {
 	private INutritionLogService nutritionLogService;
 	
 	@PostMapping("/log")
-	public ResponseEntity<NutritionLogResponse> logNutrition(NutritionLogRequest req){
+	public ResponseEntity<NutritionLogResponse> logNutrition(@Valid @RequestBody NutritionLogRequest req){
 		return ResponseEntity.ok(nutritionLogService.logNutrition(req));
 	}
 	
@@ -35,5 +40,10 @@ public class NutritionController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteLog(@PathVariable Long id){
 		return ResponseEntity.ok(nutritionLogService.delete(id));
+	}
+	
+	@GetMapping("/daily-calories")
+	public ResponseEntity<List<DailyCaloriesResponse>>getDailyCalories() {
+	    return ResponseEntity.ok(nutritionLogService.getDailyCalories());
 	}
 }

@@ -31,7 +31,7 @@ public class FoodController {
 		return ResponseEntity.ok(foodService.searchFoods(query));
 	}
 	
-	@GetMapping("/category/(category}")
+	@GetMapping("/category/{category}")
 	public ResponseEntity<List<FoodResponse>> getByCategory(@PathVariable String category){
 		return ResponseEntity.ok(foodService.getFoodsByCategory(category));
 	}

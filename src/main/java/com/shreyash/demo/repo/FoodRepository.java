@@ -9,6 +9,6 @@ import com.shreyash.demo.model.Food;
 
 @Repository
 public interface FoodRepository extends JpaRepository<Food, Long> {
-	List<Food> findByCategoryIgnoreCase(String category);
+	List<Food> findByCategoryContainingIgnoreCase(String category);
 	List<Food> findByFoodNameContainingIgnoreCase(String foodName);
 }

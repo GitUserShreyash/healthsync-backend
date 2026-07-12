@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 
-import com.shreyash.demo.dto.BodyMetricRequest;
 import com.shreyash.demo.dto.BodyMetricResponse;
 import com.shreyash.demo.mapper.BodyMetricsMapper;
 import com.shreyash.demo.model.BodyMetrics;
@@ -16,6 +16,7 @@ import com.shreyash.demo.repo.BodyMetricsRepository;
 import com.shreyash.demo.repo.UserProfileRepository;
 import com.shreyash.demo.repo.UserRepository;
 
+@Service
 public class BodyMetricsServiceImpl implements IBodyMetricsService{
 
 	@Autowired

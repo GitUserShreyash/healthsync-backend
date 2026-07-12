@@ -1,8 +1,7 @@
 package com.shreyash.demo.model;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,26 +14,28 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "password_reset_tokens")
+@Table(name = "workout_exercises")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PasswordResetToken {
+public class WorkoutExercise {
 
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String otp;
+    private String exerciseName;
 
-    private LocalDateTime createdAt;
-    
-    private LocalDateTime expiresAt;
+    private Integer sets;
 
-    private Boolean used;
+    private Integer reps;
 
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private User user;
+    private Double weight;
+
+    private Integer restSeconds;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "plan_id")
+    private WorkoutPlan workoutPlan;
 }

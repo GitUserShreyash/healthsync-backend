@@ -5,10 +5,12 @@ import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
 
 import com.shreyash.demo.model.Email;
 import com.shreyash.demo.repo.EmailRepository;
 
+@Service
 public class EmailServiceImpl implements IEmailService {
 	
 	@Autowired

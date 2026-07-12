@@ -30,7 +30,7 @@ public class FoodServiceImpl implements IFoodService {
 
 	@Override
 	public List<FoodResponse> getFoodsByCategory(String category) {
-		return foodRepo.findByCategoryIgnoreCase(category).stream().map(mapper::toDto).toList();
+		return foodRepo.findByCategoryContainingIgnoreCase(category).stream().map(mapper::toDto).toList();
 	}
 
 }

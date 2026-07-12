@@ -32,6 +32,8 @@ public class EmailVerificationToken {
 
     private Boolean verified;
 
+    private LocalDateTime createdAt;
+    
     @ManyToOne
     @JoinColumn(name="user_id")
     private User user;

@@ -14,6 +14,8 @@ import com.shreyash.demo.dto.HydrationLogRequest;
 import com.shreyash.demo.dto.HydrationLogResponse;
 import com.shreyash.demo.service.IHydrationService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/hydration")
 public class HydrationController {
@@ -22,7 +24,7 @@ public class HydrationController {
 	private IHydrationService hydrationService;
 	
 	@PostMapping("/log")
-	public ResponseEntity<HydrationLogResponse> logHydration(@RequestBody HydrationLogRequest req){
+	public ResponseEntity<HydrationLogResponse> logHydration(@Valid @RequestBody HydrationLogRequest req){
 		return ResponseEntity.ok(hydrationService.logWater(req));
 	}
 	
