@@ -18,8 +18,10 @@ import com.shreyash.demo.mapper.DTOMapper;
 import com.shreyash.demo.model.EmailVerificationToken;
 import com.shreyash.demo.model.PasswordResetToken;
 import com.shreyash.demo.model.User;
+import com.shreyash.demo.model.UserProfile;
 import com.shreyash.demo.repo.EmailVerificationTokenRepository;
 import com.shreyash.demo.repo.PasswordResetTokenRepository;
+import com.shreyash.demo.repo.UserProfileRepository;
 import com.shreyash.demo.repo.UserRepository;
 
 
@@ -43,6 +45,8 @@ public class AuthServiceImpl implements IAuthService{
 	@Autowired
 	private PasswordResetTokenRepository passwordResetRepo;
 	
+	@Autowired
+	private UserProfileRepository profileRepo;
 	
 	private String generateOTP() {
 		return String.valueOf(ThreadLocalRandom.current().nextInt(100000, 1000000));
@@ -63,7 +67,10 @@ public class AuthServiceImpl implements IAuthService{
 		user.setPassword(passwordEncoder.encode(req.getPassword()));
 		
 		User savedUser = userRepo.save(user);
+		UserProfile profile = new UserProfile();
 		
+		profile.setUser(savedUser);
+		profileRepo.save(profile);
 		String genOTP = generateOTP();
 		
 		EmailVerificationToken evt = new EmailVerificationToken();

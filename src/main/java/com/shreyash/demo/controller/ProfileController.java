@@ -22,11 +22,13 @@ public class ProfileController {
 	
 	@PutMapping("/profile")
 	public ResponseEntity<ProfileResponse> updateProfile(@Valid @RequestBody ProfileRequest req){
+		System.out.println("ProfileController::updateProfile()");
 		return ResponseEntity.ok(profileService.updateProfile(req));
 	}
 	
 	@GetMapping("/profile")
-	public ResponseEntity<ProfileResponse> getProfile(@Valid @RequestBody ProfileRequest req){
+	public ResponseEntity<ProfileResponse> getProfile(){
+		System.out.println("ProfileController::getProfile()");
 		return ResponseEntity.ok(profileService.getProfile());
 	}
 }

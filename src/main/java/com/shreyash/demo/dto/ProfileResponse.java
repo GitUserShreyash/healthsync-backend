@@ -13,9 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProfileResponse {
-	private Long userId;
-    private String username;
-    private String email;
     private Integer age;
     private Gender gender;
     private Double heightCm;
