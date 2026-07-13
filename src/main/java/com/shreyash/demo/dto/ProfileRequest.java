@@ -40,5 +40,8 @@ public class ProfileRequest {
     @NotNull(message = "Experience level is required")
     private ExperienceLevel experienceLevel;
 
+    //@NotNull(message = "Diet Preference is required")
+    private String dietPreference;
+    
     private String timezone;
 }
