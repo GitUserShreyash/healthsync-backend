@@ -9,6 +9,7 @@ import com.shreyash.demo.enums.ActivityLevel;
 import com.shreyash.demo.enums.ExperienceLevel;
 import com.shreyash.demo.enums.Gender;
 import com.shreyash.demo.enums.GoalType;
+import com.shreyash.demo.enums.WorkoutIntesity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -60,6 +61,9 @@ public class UserProfile {
     @Enumerated(EnumType.STRING)
     private ExperienceLevel experienceLevel;
 
+    @Enumerated(EnumType.STRING)
+    private WorkoutIntesity workoutIntensity;
+    
     private String dietPreference;
 
     private String timezone;
@@ -73,7 +77,9 @@ public class UserProfile {
     private Double recommendedWaterIntakeL;
 
     private Integer hydrationStreakDays = 0;
-
+    
+    private Integer recommendedCaloryIntake;
+    
     private Boolean profileCompleted = false;
 
     @CreationTimestamp

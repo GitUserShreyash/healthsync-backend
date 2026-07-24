@@ -1,6 +1,5 @@
 package com.shreyash.demo.service;
 
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,10 +40,12 @@ public class ProfileService implements IProfileService {
 		profile.setBmiCategory(calculationService.getBmiCategory(bmi));
 		profile.setBodyFat(calculationService.getBodyFat(profile.getGender(), bmi, profile.getAge()));
 		profile.setRecommendedWaterIntakeL(calculationService.calculateWaterIntake(profile.getWeightKg(), profile.getActivityLevel()));
+		profile.setRecommendedCaloryIntake(calculationService.calculateDailyCalorieGoal(profile));
 		profile.setProfileCompleted(true);
 		
 		return profile;
 	}
+	
 	@Override
 	public ProfileResponse getProfile() {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -69,8 +70,6 @@ public class ProfileService implements IProfileService {
 		profileMapper.updateEntity(req, profile);
 
 		profile = setBodyMetrics(profile);
-
-		workoutPlanService.generatePlan(user, profile);
 		
 		metricsService.logMetric(profile, user);
 		

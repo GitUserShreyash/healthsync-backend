@@ -4,6 +4,7 @@ import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.shreyash.demo.enums.GoalType;
 import com.shreyash.demo.enums.WorkoutType;
 
 import jakarta.persistence.CascadeType;
@@ -34,9 +35,8 @@ public class WorkoutPlan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Enumerated(EnumType.STRING)
+    private GoalType goalType;
 
     @Enumerated(EnumType.STRING)
     private DayOfWeek day;

@@ -26,10 +26,11 @@ public class FoodController {
 		return ResponseEntity.ok(foodService.getAllFoods());
 	}
 	
+	/* this service can be handled in front end to avoid frequent call for search
 	@GetMapping("/search")
 	public ResponseEntity<List<FoodResponse>> searchFood(@RequestParam String query){
 		return ResponseEntity.ok(foodService.searchFoods(query));
-	}
+	}*/
 	
 	@GetMapping("/category/{category}")
 	public ResponseEntity<List<FoodResponse>> getByCategory(@PathVariable String category){

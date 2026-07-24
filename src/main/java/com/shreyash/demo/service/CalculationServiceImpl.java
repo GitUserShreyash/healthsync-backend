@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.shreyash.demo.enums.ActivityLevel;
 import com.shreyash.demo.enums.Gender;
 import com.shreyash.demo.enums.WorkoutType;
+import com.shreyash.demo.model.UserProfile;
 
 @Service
 public class CalculationServiceImpl implements ICalculationService {
@@ -77,4 +78,57 @@ public class CalculationServiceImpl implements ICalculationService {
 	                    * duration);
 	}
 
+	@Override
+	public int calculateDailyCalorieGoal(UserProfile profile) {
+
+	    double bmr;
+
+	    if (profile.getGender() == Gender.MALE) {
+	        bmr = (10 * profile.getWeightKg())
+	                + (6.25 * profile.getHeightCm())
+	                - (5 * profile.getAge())
+	                + 5;
+	    } else {
+	        bmr = (10 * profile.getWeightKg())
+	                + (6.25 * profile.getHeightCm())
+	                - (5 * profile.getAge())
+	                - 161;
+	    }
+
+	    // Daily maintenance calories
+	    double dailyCalories = bmr * profile.getActivityLevel().getMultiplier();
+
+	    switch (profile.getGoal()) {
+
+	        case FAT_LOSS:
+	            dailyCalories -= 500;
+	            break;
+
+	        case MUSCLE_GAIN:
+	            dailyCalories += 300;
+	            break;
+
+	        case WEIGHT_GAIN:
+	            dailyCalories += 500;
+	            break;
+
+	        case IMPROVE_FITNESS:
+	            // Small increase to support training and recovery
+	            dailyCalories += 150;
+	            break;
+
+	        case MAINTENANCE:
+	        default:
+	            break;
+	    }
+
+	    // Prevent unrealistic recommendations
+	    if (profile.getGender() == Gender.MALE) {
+	        dailyCalories = Math.max(dailyCalories, 1500);
+	    } else {
+	        dailyCalories = Math.max(dailyCalories, 1200);
+	    }
+
+	    return (int) Math.round(dailyCalories);
+	}
 }

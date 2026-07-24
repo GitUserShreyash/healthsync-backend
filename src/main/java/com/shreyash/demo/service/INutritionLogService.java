@@ -9,7 +9,8 @@ import com.shreyash.demo.dto.NutritionLogResponse;
 public interface INutritionLogService {
 
 	NutritionLogResponse logNutrition(NutritionLogRequest req);
-	List<NutritionLogResponse> getHistory();
 	String delete(long id);
-	List<DailyCaloriesResponse> getDailyCalories();
+	List<DailyCaloriesResponse> getDailyCaloriesHistory();
+	List<NutritionLogResponse> getTodayNutritionLogs();
+	Integer getTodayCalories();
 }

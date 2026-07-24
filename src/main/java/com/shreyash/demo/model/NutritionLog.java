@@ -35,8 +35,6 @@ public class NutritionLog {
 
     private Double quantity;
 
-    private String unit;
-
     private Double calories;
 
     private Double protein;

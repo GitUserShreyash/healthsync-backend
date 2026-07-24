@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shreyash.demo.dto.DailyCaloriesResponse;
@@ -27,14 +26,14 @@ public class NutritionController {
 	@Autowired
 	private INutritionLogService nutritionLogService;
 	
-	@PostMapping("/log")
+	@PostMapping()
 	public ResponseEntity<NutritionLogResponse> logNutrition(@Valid @RequestBody NutritionLogRequest req){
 		return ResponseEntity.ok(nutritionLogService.logNutrition(req));
 	}
 	
-	@GetMapping("/history")
-	public ResponseEntity<List<NutritionLogResponse>> getHistory(){
-		return ResponseEntity.ok(nutritionLogService.getHistory());
+	@GetMapping("/today")
+	public ResponseEntity<List<NutritionLogResponse>> getTodayNutritionLogs(){
+		return ResponseEntity.ok(nutritionLogService.getTodayNutritionLogs());
 	}
 	
 	@DeleteMapping("/{id}")
@@ -43,7 +42,7 @@ public class NutritionController {
 	}
 	
 	@GetMapping("/daily-calories")
-	public ResponseEntity<List<DailyCaloriesResponse>>getDailyCalories() {
-	    return ResponseEntity.ok(nutritionLogService.getDailyCalories());
+	public ResponseEntity<List<DailyCaloriesResponse>>getDailyCaloriesHistory() {
+	    return ResponseEntity.ok(nutritionLogService.getDailyCaloriesHistory());
 	}
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.shreyash.demo.dto.WorkoutLogRequest;
 import com.shreyash.demo.dto.WorkoutLogResponse;
 import com.shreyash.demo.dto.WorkoutPlanResponse;
+import com.shreyash.demo.dto.WorkoutSummaryResponse;
 import com.shreyash.demo.service.IWorkoutPlanService;
 import com.shreyash.demo.service.IWorkoutService;
 
@@ -34,11 +35,6 @@ public class WorkoutController {
 	    return ResponseEntity.ok(workoutPlanService.getWeeklyPlan());
 	}
 	
-	@PostMapping("/complete/{planId}")
-    public ResponseEntity<String> completeWorkout(@PathVariable Long planId) {
-        return ResponseEntity.ok(workoutPlanService.completeWorkout(planId));
-    }
-	
 	@PostMapping("/log")
     public ResponseEntity<WorkoutLogResponse> logWorkout(@Valid @RequestBody WorkoutLogRequest request) {
         return ResponseEntity.ok(workoutService.logWorkout(request));
@@ -52,5 +48,15 @@ public class WorkoutController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteWorkout(@PathVariable Long id){
 		return ResponseEntity.ok(workoutService.delete(id));
+	}
+	
+	@GetMapping("/summary")
+	public ResponseEntity<WorkoutSummaryResponse> getWorkoutSummary() {
+	    return ResponseEntity.ok(workoutService.getWorkoutSummary());
+	}
+
+	@GetMapping("/today")
+	public ResponseEntity<WorkoutPlanResponse> getTodayWorkout() {
+	    return ResponseEntity.ok(workoutPlanService.getTodayWorkout());
 	}
 }

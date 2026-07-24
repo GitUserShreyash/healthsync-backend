@@ -3,6 +3,7 @@ package com.shreyash.demo.service;
 import com.shreyash.demo.enums.ActivityLevel;
 import com.shreyash.demo.enums.Gender;
 import com.shreyash.demo.enums.WorkoutType;
+import com.shreyash.demo.model.UserProfile;
 
 public interface ICalculationService {
 	double calculateBmi(double weightKg, double heightCm);
@@ -10,4 +11,6 @@ public interface ICalculationService {
 	Double getBodyFat(Gender gender, double bmi, int age);
 	double calculateWaterIntake(double weightKg, ActivityLevel activityLevel);
 	int calculateCaloriesBurned(WorkoutType type, Integer duration, Double weightKg);
+	int calculateDailyCalorieGoal(UserProfile profile);
+	
 }

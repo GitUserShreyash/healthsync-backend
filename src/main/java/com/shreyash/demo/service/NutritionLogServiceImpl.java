@@ -10,6 +10,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.shreyash.demo.dto.DailyCaloriesResponse;
 import com.shreyash.demo.dto.NutritionLogRequest;
@@ -47,15 +48,16 @@ public class NutritionLogServiceImpl implements INutritionLogService {
 	}
 
 	@Override
-	public List<NutritionLogResponse> getHistory() {
+	public List<NutritionLogResponse> getTodayNutritionLogs() {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
 		User user = userRepo.findByUsername(username).orElseThrow(()-> new RuntimeException("User not found"));
 		
-		return nutritionLogRepo.findByUserOrderByLoggedAtDesc(user).stream().map(nutritionLogMapper::toDto).toList();
+		return nutritionLogRepo.findByUserAndLoggedAtGreaterThanEqualOrderByLoggedAtDesc(user,LocalDate.now().atStartOfDay()).stream().map(nutritionLogMapper::toDto).toList();
 	}
 
 	@Override
+	@Transactional
 	public String delete(long id) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
@@ -73,7 +75,7 @@ public class NutritionLogServiceImpl implements INutritionLogService {
 	}
 
 	@Override
-	public List<DailyCaloriesResponse> getDailyCalories() {
+	public List<DailyCaloriesResponse> getDailyCaloriesHistory() {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		
 		User user = userRepo.findByUsername(username).orElseThrow(()-> new ResourceNotFoundException("User not found"));
@@ -102,6 +104,15 @@ public class NutritionLogServiceImpl implements INutritionLogService {
 	    }
 
 	    return response;
+	}
+
+	@Override
+	public Integer getTodayCalories() {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		User user = userRepo.findByUsername(username).orElseThrow(()-> new ResourceNotFoundException("User not found"));
+		
+		return nutritionLogRepo.getTodayCalories(user, LocalDate.now().atStartOfDay());
 	}
 
 

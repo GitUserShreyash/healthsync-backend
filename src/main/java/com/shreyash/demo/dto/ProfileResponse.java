@@ -24,6 +24,7 @@ public class ProfileResponse {
     private Double bmi;
     private String bmiCategory;
     private Double recommendedWaterIntakeL;
+    private Integer recommendedCaloryIntake;
     private Integer hydrationStreakDays;
     private Boolean profileCompleted;
 }

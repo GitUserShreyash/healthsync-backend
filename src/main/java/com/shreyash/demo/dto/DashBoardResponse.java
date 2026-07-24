@@ -23,8 +23,9 @@ public class DashBoardResponse {
     private Integer hydrationStreakDays;
 
     private Integer caloriesConsumedToday;
-    private Integer workoutsCompletedThisWeek;
 
     private GoalType goal;
+    
+    //not implemented : wait for AI module for user specific recommendation 
     private String recommendation;
 }

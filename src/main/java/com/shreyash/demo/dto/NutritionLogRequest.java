@@ -18,9 +18,6 @@ public class NutritionLogRequest {
     @PositiveOrZero(message = "Quantity cannot be negative")
     private Double quantity;
 
-    @NotBlank(message = "Unit is required")
-    private String unit;
-
     @NotNull(message = "Calories are required")
     @PositiveOrZero(message = "Calories cannot be negative")
     private Double calories;

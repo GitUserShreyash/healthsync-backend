@@ -19,6 +19,9 @@ public class DashboardService {
 	@Autowired
 	private UserProfileRepository profileRepo;
 	
+	@Autowired
+	private INutritionLogService nutritionService;
+	
 	public DashBoardResponse getDashboard() {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userRepo.findByUsername(username).orElseThrow(()-> new RuntimeException("User not found"));
@@ -31,7 +34,7 @@ public class DashboardService {
 		resp.setHydrationStreakDays(profile.getHydrationStreakDays());
 		resp.setDailyWaterGoalL(profile.getRecommendedWaterIntakeL());
 		resp.setGoal(profile.getGoal());
-		
+		resp.setCaloriesConsumedToday(nutritionService.getTodayCalories());
 		return resp;
 	}
 }
