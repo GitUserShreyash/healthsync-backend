@@ -2,7 +2,7 @@ package com.shreyash.demo.dto;
 
 import java.time.LocalDate;
 
-import com.shreyash.demo.enums.WorkoutIntesity;
+import com.shreyash.demo.enums.WorkoutIntensity;
 import com.shreyash.demo.enums.WorkoutType;
 
 import jakarta.validation.constraints.Min;
@@ -23,7 +23,7 @@ public class WorkoutLogRequest {
     private Integer durationMinutes;
 
     @NotNull(message = "Intensity is required")
-    private WorkoutIntesity intensity;
+    private WorkoutIntensity intensity;
 
     private String notes;
 }

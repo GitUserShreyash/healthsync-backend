@@ -1,7 +1,9 @@
 package com.shreyash.demo.dto;
 
 import java.time.DayOfWeek;
+import java.util.List;
 
+import com.shreyash.demo.dto.workout.WorkoutExerciseResponse;
 import com.shreyash.demo.enums.WorkoutType;
 
 import lombok.AllArgsConstructor;
@@ -20,5 +22,5 @@ public class WorkoutPlanResponse {
     private WorkoutType workoutType;
     private Integer targetDurationMinutes;
     private String description;
-    private Boolean completed;
+    private List<WorkoutExerciseResponse> exercises;
 }

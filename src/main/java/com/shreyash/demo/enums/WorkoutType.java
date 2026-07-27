@@ -11,5 +11,6 @@ public enum WorkoutType {
 	WALKING,
 	CYCLING,
 	YOGA,
-	STRENGTH
+	STRENGTH,
+	ARMS
 }

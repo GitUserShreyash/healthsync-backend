@@ -3,7 +3,7 @@ package com.shreyash.demo.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import com.shreyash.demo.enums.WorkoutIntesity;
+import com.shreyash.demo.enums.WorkoutIntensity;
 import com.shreyash.demo.enums.WorkoutType;
 
 import lombok.AllArgsConstructor;
@@ -25,7 +25,7 @@ public class WorkoutLogResponse {
 
     private Integer durationMinutes;
 
-    private WorkoutIntesity intensity;
+    private WorkoutIntensity intensity;
 
     private Integer caloriesBurned;
 

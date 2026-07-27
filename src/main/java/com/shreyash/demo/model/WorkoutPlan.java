@@ -47,8 +47,6 @@ public class WorkoutPlan {
     private Integer targetDurationMinutes;
 
     private String description;
-
-    private Boolean completed = false;
     
     @OneToMany(mappedBy = "workoutPlan",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WorkoutExercise> exercises = new ArrayList<>();

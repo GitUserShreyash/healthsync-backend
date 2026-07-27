@@ -53,7 +53,6 @@ public class WorkoutPlanServiceImpl implements IWorkoutPlanService {
 	    plan.setWorkoutType(type);
 	    plan.setTargetDurationMinutes(duration);
 	    plan.setDescription(description);
-	    plan.setCompleted(false);
 
 	    return plan;
 	}
@@ -167,11 +166,19 @@ public class WorkoutPlanServiceImpl implements IWorkoutPlanService {
 
 	@Override
 	public WorkoutPlanResponse getTodayWorkout() {
+		String username = SecurityContextHolder
+	            .getContext()
+	            .getAuthentication()
+	            .getName();
 
+	    User user = userRepo.findByUsername(username)
+	            .orElseThrow(() ->
+	                    new RuntimeException("User not found"));
+	    
 	    DayOfWeek today = LocalDate.now().getDayOfWeek();
 
 	    WorkoutPlan workoutPlan =
-	            planRepo.findByDay(today)
+	            planRepo.findByDayAndGoalType(today,profileRepo.findByUser(user).get().getGoal())
 	                    .orElseThrow(() ->
 	                            new RuntimeException("No workout available today"));
 

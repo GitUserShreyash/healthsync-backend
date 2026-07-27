@@ -13,7 +13,7 @@ import com.shreyash.demo.model.WorkoutPlan;
 @Repository
 public interface WorkoutPlanRepository extends JpaRepository<WorkoutPlan, Long> {
     
-    Optional<WorkoutPlan> findByDay(DayOfWeek day);
+    Optional<WorkoutPlan> findByDayAndGoalType(DayOfWeek day, GoalType goalType);
     
     List<WorkoutPlan> findByGoalType(GoalType goalType);
 }

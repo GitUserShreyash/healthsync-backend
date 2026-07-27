@@ -3,7 +3,7 @@ package com.shreyash.demo.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import com.shreyash.demo.enums.WorkoutIntesity;
+import com.shreyash.demo.enums.WorkoutIntensity;
 import com.shreyash.demo.enums.WorkoutType;
 
 import jakarta.persistence.Column;
@@ -46,7 +46,7 @@ public class WorkoutLog {
     private Integer durationMinutes;
 
     @Enumerated(EnumType.STRING)
-    private WorkoutIntesity intensity;
+    private WorkoutIntensity intensity;
 
     @Min(0)
     private Integer caloriesBurned;

@@ -9,7 +9,7 @@ import com.shreyash.demo.enums.ActivityLevel;
 import com.shreyash.demo.enums.ExperienceLevel;
 import com.shreyash.demo.enums.Gender;
 import com.shreyash.demo.enums.GoalType;
-import com.shreyash.demo.enums.WorkoutIntesity;
+import com.shreyash.demo.enums.WorkoutIntensity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -62,7 +62,7 @@ public class UserProfile {
     private ExperienceLevel experienceLevel;
 
     @Enumerated(EnumType.STRING)
-    private WorkoutIntesity workoutIntensity;
+    private WorkoutIntensity workoutIntensity;
     
     private String dietPreference;
 
