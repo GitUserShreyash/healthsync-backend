@@ -1,4 +1,4 @@
-package com.shreyash.demo.service;
+package com.shreyash.demo.service.impl;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,6 +21,7 @@ import com.shreyash.demo.model.HydrationLog;
 import com.shreyash.demo.model.User;
 import com.shreyash.demo.repo.HydrationLogRepository;
 import com.shreyash.demo.repo.UserRepository;
+import com.shreyash.demo.service.IHydrationService;
 
 
 @Service

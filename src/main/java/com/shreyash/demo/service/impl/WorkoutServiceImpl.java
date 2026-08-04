@@ -1,4 +1,4 @@
-package com.shreyash.demo.service;
+package com.shreyash.demo.service.impl;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -17,13 +17,14 @@ import com.shreyash.demo.dto.WorkoutLogRequest;
 import com.shreyash.demo.dto.WorkoutLogResponse;
 import com.shreyash.demo.dto.WorkoutSummaryResponse;
 import com.shreyash.demo.mapper.WorkoutLogMapper;
-import com.shreyash.demo.mapper.WorkoutPlanMapper;
 import com.shreyash.demo.model.User;
 import com.shreyash.demo.model.UserProfile;
 import com.shreyash.demo.model.WorkoutLog;
 import com.shreyash.demo.repo.UserProfileRepository;
 import com.shreyash.demo.repo.UserRepository;
 import com.shreyash.demo.repo.WorkoutLogRepository;
+import com.shreyash.demo.service.ICalculationService;
+import com.shreyash.demo.service.IWorkoutService;
 
 @Service
 public class WorkoutServiceImpl implements IWorkoutService {
@@ -75,6 +76,8 @@ public class WorkoutServiceImpl implements IWorkoutService {
 		User user = userRepo.findByUsername(username).orElseThrow(()-> new RuntimeException("User not found"));
 		
 		UserProfile profile = userProfileRepo.findByUser(user).orElseThrow(()-> new RuntimeException("User profile not found"));
+		
+		System.out.println(req.toString());
 		
 		WorkoutLog log = mapper.toEntity(req);
 		log.setUser(user);

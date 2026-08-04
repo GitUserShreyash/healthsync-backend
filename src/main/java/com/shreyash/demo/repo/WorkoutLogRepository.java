@@ -44,4 +44,10 @@ public interface WorkoutLogRepository extends JpaRepository<WorkoutLog, Long> {
     	        User user,
     	        LocalDateTime start,
     	        LocalDateTime end);
+    
+    List<WorkoutLog> findByUserAndLoggedAtBetweenOrderByLoggedAtAsc(
+            User user,
+            LocalDateTime start,
+            LocalDateTime end
+    );
 }

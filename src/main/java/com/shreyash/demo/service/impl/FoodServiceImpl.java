@@ -1,4 +1,4 @@
-package com.shreyash.demo.service;
+package com.shreyash.demo.service.impl;
 
 import java.util.List;
 
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.shreyash.demo.dto.FoodResponse;
 import com.shreyash.demo.mapper.FoodMapper;
 import com.shreyash.demo.repo.FoodRepository;
+import com.shreyash.demo.service.IFoodService;
 
 @Service
 public class FoodServiceImpl implements IFoodService {

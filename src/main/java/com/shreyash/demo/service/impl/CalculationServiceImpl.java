@@ -1,4 +1,4 @@
-package com.shreyash.demo.service;
+package com.shreyash.demo.service.impl;
 
 import org.springframework.stereotype.Service;
 
@@ -6,6 +6,7 @@ import com.shreyash.demo.enums.ActivityLevel;
 import com.shreyash.demo.enums.Gender;
 import com.shreyash.demo.enums.WorkoutType;
 import com.shreyash.demo.model.UserProfile;
+import com.shreyash.demo.service.ICalculationService;
 
 @Service
 public class CalculationServiceImpl implements ICalculationService {

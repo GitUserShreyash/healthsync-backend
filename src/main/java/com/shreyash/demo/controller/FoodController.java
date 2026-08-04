@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shreyash.demo.dto.FoodResponse;
-import com.shreyash.demo.service.FoodServiceImpl;
+import com.shreyash.demo.service.impl.FoodServiceImpl;
 
 
 @RestController

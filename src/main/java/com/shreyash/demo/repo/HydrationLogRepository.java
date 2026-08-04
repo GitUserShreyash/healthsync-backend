@@ -19,4 +19,5 @@ public interface HydrationLogRepository extends JpaRepository<HydrationLog, Long
             LocalDateTime startDate,
             LocalDateTime endDate
     );
+    
 }

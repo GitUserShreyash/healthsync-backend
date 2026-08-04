@@ -1,4 +1,4 @@
-package com.shreyash.demo.service;
+package com.shreyash.demo.service.impl;
 
 import java.time.LocalDateTime;
 
@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.shreyash.demo.model.Email;
 import com.shreyash.demo.repo.EmailRepository;
+import com.shreyash.demo.service.IEmailService;
 
 @Service
 public class EmailServiceImpl implements IEmailService {

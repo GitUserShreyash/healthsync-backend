@@ -1,4 +1,4 @@
-package com.shreyash.demo.service;
+package com.shreyash.demo.service.impl;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -21,6 +21,8 @@ import com.shreyash.demo.repo.UserProfileRepository;
 import com.shreyash.demo.repo.UserRepository;
 import com.shreyash.demo.repo.WorkoutLogRepository;
 import com.shreyash.demo.repo.WorkoutPlanRepository;
+import com.shreyash.demo.service.ICalculationService;
+import com.shreyash.demo.service.IWorkoutPlanService;
 
 import jakarta.transaction.Transactional;
 

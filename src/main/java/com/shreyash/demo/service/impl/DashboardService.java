@@ -1,4 +1,4 @@
-package com.shreyash.demo.service;
+package com.shreyash.demo.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,6 +9,7 @@ import com.shreyash.demo.model.User;
 import com.shreyash.demo.model.UserProfile;
 import com.shreyash.demo.repo.UserProfileRepository;
 import com.shreyash.demo.repo.UserRepository;
+import com.shreyash.demo.service.INutritionLogService;
 
 @Service
 public class DashboardService {

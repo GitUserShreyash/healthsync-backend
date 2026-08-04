@@ -1,4 +1,4 @@
-package com.shreyash.demo.service;
+package com.shreyash.demo.service.impl;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,10 @@ import com.shreyash.demo.model.User;
 import com.shreyash.demo.model.UserProfile;
 import com.shreyash.demo.repo.UserProfileRepository;
 import com.shreyash.demo.repo.UserRepository;
+import com.shreyash.demo.service.IBodyMetricsService;
+import com.shreyash.demo.service.ICalculationService;
+import com.shreyash.demo.service.IProfileService;
+import com.shreyash.demo.service.IWorkoutPlanService;
 
 @Service
 public class ProfileService implements IProfileService {

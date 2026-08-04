@@ -1,4 +1,4 @@
-package com.shreyash.demo.service;
+package com.shreyash.demo.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.ThreadLocalRandom;
@@ -23,6 +23,7 @@ import com.shreyash.demo.repo.EmailVerificationTokenRepository;
 import com.shreyash.demo.repo.PasswordResetTokenRepository;
 import com.shreyash.demo.repo.UserProfileRepository;
 import com.shreyash.demo.repo.UserRepository;
+import com.shreyash.demo.service.IAuthService;
 
 
 @Service
