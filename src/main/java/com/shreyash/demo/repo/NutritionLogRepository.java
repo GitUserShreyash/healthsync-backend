@@ -35,4 +35,6 @@ public interface NutritionLogRepository extends JpaRepository<NutritionLog, Long
     			      AND n.loggedAt >= :startOfDay
     			""")
     			Integer getTodayCalories(User user, LocalDateTime startOfDay);
+    		
+    List<NutritionLog> findByUserAndLoggedAtBetweenOrderByLoggedAtAsc(User user, LocalDateTime startTime, LocalDateTime endTime);
 }

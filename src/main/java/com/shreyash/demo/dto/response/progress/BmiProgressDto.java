@@ -9,6 +9,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
+
 public class BmiProgressDto {
 	private Double currentBmi;
 
