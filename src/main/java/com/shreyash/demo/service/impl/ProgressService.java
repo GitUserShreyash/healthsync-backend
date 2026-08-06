@@ -1,6 +1,7 @@
 package com.shreyash.demo.service.impl;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -68,15 +69,17 @@ public class ProgressService {
 									                    )
 													));
 		
-		List<WaterDataPointDto> history = dailyWater.entrySet()
-													.stream()
-													.map(entry ->
-								                    		new WaterDataPointDto(
-									                            entry.getKey(),
-									                            entry.getValue()
-									                    	)
-													)
-													.toList();
+		List<WaterDataPointDto> history = new ArrayList<>();
+		
+		for(LocalDate date = startDate; !date.isAfter(endDate); date=date.plusDays(1)) {
+			history.add(
+	                new WaterDataPointDto(
+	                        date,
+	                        dailyWater.getOrDefault(date, 0.0)
+	                )
+	        );
+		}
+		
 		double averageWater = history.stream()
 								.mapToDouble(WaterDataPointDto::getLiters)
 								.average()
@@ -102,55 +105,115 @@ public class ProgressService {
 	private WeightProgressDto getWeightProgress(User user, LocalDate startDate, LocalDate endDate) {
 		List<BodyMetrics> metrics = metricRepo.findByUserAndRecordedAtBetweenOrderByRecordedAtDesc(user, startDate.atStartOfDay(), endDate.atTime(23,59,59));
 		
-		List<WeightDataPointDto> history =
-	            metrics.stream()
-	            .map(metric ->
-	                    new WeightDataPointDto(
-	                            metric.getRecordedAt().toLocalDate(),
-	                            metric.getWeightKg()
-	                    )
-	            )
-	            .sorted(Comparator.comparing(WeightDataPointDto::getDate))
-	            .toList();
-		
-		double currentWeight = history.isEmpty()?0:history.get(history.size()-1).getWeight();
-		
-		double startingWeight = history.isEmpty()?0:history.get(0).getWeight();
-		
-		double highestWeight = history.stream()
-									.mapToDouble(WeightDataPointDto::getWeight)
-									.max()
-									.orElse(0);
-		
-		double lowestWeight = history.stream()
-									.mapToDouble(WeightDataPointDto::getWeight)
-									.min()
-									.orElse(0);
-		
-		WeightProgressDto dto = new WeightProgressDto();
-		dto.setCurrentWeight(currentWeight);
-		dto.setHighestWeight(highestWeight);
-		dto.setHistory(history);
-		dto.setLowestWeight(lowestWeight);
-		dto.setStartingWeight(startingWeight);
-		dto.setWeightChange(currentWeight-startingWeight);
-		
-		return dto;
+		Map<LocalDate, Double> weightMap = metrics.stream()
+	            .collect(Collectors.toMap(
+	                    metric -> metric.getRecordedAt().toLocalDate(),
+	                    BodyMetrics::getWeightKg,
+	                    (oldValue, newValue) -> newValue,
+	                    TreeMap::new
+	            ));
+
+
+	    List<WeightDataPointDto> history = new ArrayList<>();
+
+	    Double lastWeight = null;
+
+
+	    for(LocalDate date = startDate;
+	        !date.isAfter(endDate);
+	        date = date.plusDays(1)) {
+
+
+	        if(weightMap.containsKey(date)) {
+	            lastWeight = weightMap.get(date);
+	        }
+
+
+	        if(lastWeight != null) {
+	            history.add(
+	                new WeightDataPointDto(
+	                    date,
+	                    lastWeight
+	                )
+	            );
+	        }
+	    }
+
+
+	    double currentWeight = history.isEmpty()
+	            ? 0
+	            : history.get(history.size()-1).getWeight();
+
+
+	    double startingWeight = history.isEmpty()
+	            ? 0
+	            : history.get(0).getWeight();
+
+
+	    double highestWeight = history.stream()
+	            .mapToDouble(WeightDataPointDto::getWeight)
+	            .max()
+	            .orElse(0);
+
+
+	    double lowestWeight = history.stream()
+	            .mapToDouble(WeightDataPointDto::getWeight)
+	            .min()
+	            .orElse(0);
+
+
+	    WeightProgressDto dto = new WeightProgressDto();
+
+	    dto.setCurrentWeight(currentWeight);
+	    dto.setStartingWeight(startingWeight);
+	    dto.setHighestWeight(highestWeight);
+	    dto.setLowestWeight(lowestWeight);
+	    dto.setWeightChange(currentWeight - startingWeight);
+	    dto.setHistory(history);
+
+
+	    return dto;
 	}
 	
 	//Workout Progress Retrieval
 	private WorkoutProgressDto getWorkoutProgress(User user, LocalDate startDate, LocalDate endDate) {
 		List<WorkoutLog> logs = workoutRepo.findByUserAndLoggedAtBetweenOrderByLoggedAtAsc(user, startDate.atStartOfDay(), endDate.atTime(23,59,59));
 		
-		List<WorkoutDataPointDto> history = logs.stream()
-												.map(workout ->
-														new WorkoutDataPointDto(
-																workout.getLoggedAt().toLocalDate(),
-																workout.getDurationMinutes(),
-																workout.getCaloriesBurned()
-														)
-												)
-												.toList();
+		Map<LocalDate, WorkoutDataPointDto> dailyWorkout = logs.stream()
+	            .collect(Collectors.toMap(
+	                    workout -> workout.getLoggedAt().toLocalDate(),
+	                    workout -> new WorkoutDataPointDto(
+	                            workout.getLoggedAt().toLocalDate(),
+	                            workout.getDurationMinutes(),
+	                            workout.getCaloriesBurned()
+	                    ),
+	                    (oldValue, newValue) -> newValue,
+	                    TreeMap::new
+	            ));
+
+
+	    List<WorkoutDataPointDto> history = new ArrayList<>();
+
+	    for (LocalDate date = startDate;
+	         !date.isAfter(endDate);
+	         date = date.plusDays(1)) {
+
+
+	        if (dailyWorkout.containsKey(date)) {
+
+	            history.add(dailyWorkout.get(date));
+
+	        } else {
+
+	            history.add(
+	                    new WorkoutDataPointDto(
+	                            date,
+	                            0,
+	                            0.0
+	                    )
+	            );
+	        }
+	    }
 		
 		Integer totalMinutes = workoutRepo.getTotalMinutes(user, startDate.atStartOfDay(), endDate.atTime(23,59,59));
 		
@@ -170,106 +233,159 @@ public class ProgressService {
 		List<NutritionLog> logs = nutritionRepo.findByUserAndLoggedAtBetweenOrderByLoggedAtAsc(user, startDate.atStartOfDay(), endDate.atTime(23, 59, 59));
 		
 		Map<LocalDate, Double> dailyCalories = logs.stream()
-									.collect(Collectors.groupingBy(
-										log -> log.getLoggedAt().toLocalDate(),
-										TreeMap::new,
-										Collectors.summingDouble(
-									           log -> log.getCalories()
-									    )
-									));
-		
-		List<CaloriesDataPointDto> history = dailyCalories.entrySet()
-										        .stream()
-										        .map(entry -> new CaloriesDataPointDto(
-										                entry.getKey(),
-										                entry.getValue()
-										        ))
-										        .toList();
-		
-		Double avgCalories = history.stream()
-								.mapToDouble(CaloriesDataPointDto :: getCalories)
-								.average()
-								.orElse(0);
-		
-		
-		Map<LocalDate, Double> dailyProtein = logs.stream()
-												.collect(Collectors.groupingBy(
-														log -> log.getLoggedAt().toLocalDate(),
-														TreeMap::new,
-														Collectors.summingDouble(NutritionLog::getProtein)
-												));
-		
-		Double avgProtein = dailyProtein.values()
-								.stream()
-								.mapToDouble(Double:: doubleValue)
-								.average()
-								.orElse(0);
-		
-		Map<LocalDate, Double> dailyCarbs = logs.stream()
-												.collect(Collectors.groupingBy(
-														log -> log.getLoggedAt().toLocalDate(),
-														TreeMap::new,
-														Collectors.summingDouble(NutritionLog::getCarbs)
-												));
-		
-		Double avgCarbs = dailyCarbs.values()
-								.stream()
-								.mapToDouble(Double:: doubleValue)
-								.average()
-								.orElse(0);
-		
-		Map<LocalDate, Double> dailyFat = logs.stream()
-												.collect(Collectors.groupingBy(
-														log -> log.getLoggedAt().toLocalDate(),
-														TreeMap::new,
-														Collectors.summingDouble(NutritionLog::getFat)
-												));
+	            .collect(Collectors.groupingBy(
+	                    log -> log.getLoggedAt().toLocalDate(),
+	                    TreeMap::new,
+	                    Collectors.summingDouble(NutritionLog::getCalories)
+	            ));
 
-		Double avgFat = dailyFat.values()
-								.stream()
-								.mapToDouble(Double:: doubleValue)
-								.average()
-								.orElse(0);
-		
-		UserProfile profile =userProfileRepository.findByUser(user)
-					            .orElseThrow();
-		
-		double targetCal = profile.getRecommendedCaloryIntake();
-		
-		NutritionProgressDto dto = new NutritionProgressDto();
-		dto.setAverageCalories(avgCalories);
-		dto.setAverageCarbs(avgCarbs);
-		dto.setAverageFat(avgFat);
-		dto.setAverageProtein(avgProtein);
-		dto.setTargetCalories(targetCal);
-		dto.setHistory(history);
-		
-		return dto;
+
+	    Map<LocalDate, Double> dailyProtein = logs.stream()
+	            .collect(Collectors.groupingBy(
+	                    log -> log.getLoggedAt().toLocalDate(),
+	                    TreeMap::new,
+	                    Collectors.summingDouble(NutritionLog::getProtein)
+	            ));
+
+
+	    Map<LocalDate, Double> dailyCarbs = logs.stream()
+	            .collect(Collectors.groupingBy(
+	                    log -> log.getLoggedAt().toLocalDate(),
+	                    TreeMap::new,
+	                    Collectors.summingDouble(NutritionLog::getCarbs)
+	            ));
+
+
+	    Map<LocalDate, Double> dailyFat = logs.stream()
+	            .collect(Collectors.groupingBy(
+	                    log -> log.getLoggedAt().toLocalDate(),
+	                    TreeMap::new,
+	                    Collectors.summingDouble(NutritionLog::getFat)
+	            ));
+
+
+	    List<CaloriesDataPointDto> history = new ArrayList<>();
+
+	    double totalCalories = 0;
+	    double totalProtein = 0;
+	    double totalCarbs = 0;
+	    double totalFat = 0;
+
+	    int totalDays = 0;
+
+
+	    for (LocalDate date = startDate;
+	         !date.isAfter(endDate);
+	         date = date.plusDays(1)) {
+
+
+	        double calories = dailyCalories.getOrDefault(date, 0.0);
+	        double protein = dailyProtein.getOrDefault(date, 0.0);
+	        double carbs = dailyCarbs.getOrDefault(date, 0.0);
+	        double fat = dailyFat.getOrDefault(date, 0.0);
+
+
+	        history.add(
+	                new CaloriesDataPointDto(
+	                        date,
+	                        calories
+	                )
+	        );
+
+
+	        totalCalories += calories;
+	        totalProtein += protein;
+	        totalCarbs += carbs;
+	        totalFat += fat;
+
+	        totalDays++;
+	    }
+
+
+	    double avgCalories = totalDays == 0 ? 0 : totalCalories / totalDays;
+	    double avgProtein = totalDays == 0 ? 0 : totalProtein / totalDays;
+	    double avgCarbs = totalDays == 0 ? 0 : totalCarbs / totalDays;
+	    double avgFat = totalDays == 0 ? 0 : totalFat / totalDays;
+
+
+	    UserProfile profile = userProfileRepository
+	            .findByUser(user)
+	            .orElseThrow();
+
+
+	    double targetCal = profile.getRecommendedCaloryIntake();
+
+
+	    NutritionProgressDto dto = new NutritionProgressDto();
+
+	    dto.setAverageCalories(avgCalories);
+	    dto.setAverageProtein(avgProtein);
+	    dto.setAverageCarbs(avgCarbs);
+	    dto.setAverageFat(avgFat);
+	    dto.setTargetCalories(targetCal);
+	    dto.setHistory(history);
+
+	    return dto;
 	}
 	
 	// BMI Progress Retrieval
 	private BmiProgressDto getBmiProgress(User user, LocalDate startDate, LocalDate endDate) {
 		List<BodyMetrics> metrics = metricRepo.findByUserAndRecordedAtBetweenOrderByRecordedAtDesc(user, startDate.atStartOfDay(), endDate.atTime(23,59,59));
 		
-		List<BmiDataPointDto> history =	metrics.stream()
-										            .map(metric ->
-										                    new BmiDataPointDto(
-										                            metric.getRecordedAt().toLocalDate(),
-										                            metric.getBmi()
-										                    )
-										            )
-										            .sorted(Comparator.comparing(BmiDataPointDto::getDate))
-										            .toList();
-		
-		
-		UserProfile profile =userProfileRepository.findByUser(user)
-	            							.orElseThrow();
-		
-		double currBmi = profile.getBmi();
-		String bmiCategory = profile.getBmiCategory();
-		BmiProgressDto dto = new BmiProgressDto(currBmi, bmiCategory, history);
-		
-		return dto;
+		Map<LocalDate, Double> bmiMap = metrics.stream()
+	            .collect(Collectors.toMap(
+	                    metric -> metric.getRecordedAt().toLocalDate(),
+	                    BodyMetrics::getBmi,
+	                    (oldValue, newValue) -> newValue,
+	                    TreeMap::new
+	            ));
+
+
+	    List<BmiDataPointDto> history = new ArrayList<>();
+
+	    Double lastBmi = null;
+
+
+	    for (LocalDate date = startDate;
+	         !date.isAfter(endDate);
+	         date = date.plusDays(1)) {
+
+
+	        if (bmiMap.containsKey(date)) {
+	            lastBmi = bmiMap.get(date);
+	        }
+
+
+	        if (lastBmi != null) {
+
+	            history.add(
+	                    new BmiDataPointDto(
+	                            date,
+	                            lastBmi
+	                    )
+	            );
+	        }
+	    }
+
+
+	    UserProfile profile = userProfileRepository
+	            .findByUser(user)
+	            .orElseThrow();
+
+
+	    double currBmi = profile.getBmi();
+
+	    String bmiCategory = profile.getBmiCategory();
+
+
+	    BmiProgressDto dto = new BmiProgressDto(
+	            currBmi,
+	            bmiCategory,
+	            history
+	    );
+
+
+	    return dto;
 	}
 	
 	// Service Method Which uses helper method to seed ProgressResponse and return it
