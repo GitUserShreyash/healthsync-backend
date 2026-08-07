@@ -25,7 +25,7 @@ public class ProgressController {
 		if (days != 7 && days != 30 && days != 90) {
 	        throw new IllegalArgumentException("Days must be 7, 30 or 90");
 	    }
-		
+		System.out.println("ProgressController Response:");
 		return ResponseEntity.ok(progressService.getProgress(days));
 	}
 	

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.shreyash.demo.dto.WorkoutLogRequest;
 import com.shreyash.demo.dto.WorkoutLogResponse;
 import com.shreyash.demo.dto.WorkoutSummaryResponse;
+import com.shreyash.demo.exception.ResourceNotFoundException;
 import com.shreyash.demo.mapper.WorkoutLogMapper;
 import com.shreyash.demo.model.User;
 import com.shreyash.demo.model.UserProfile;
@@ -154,6 +155,25 @@ public class WorkoutServiceImpl implements IWorkoutService {
 	            .totalCalories(totalCalories == null ? 0 : totalCalories)
 	            .currentStreak(streak)
 	            .build();
+	}
+
+	@Override
+	public Boolean getTodayStatus() {
+		User user = userRepo.findByUsername(
+	            SecurityContextHolder.getContext().getAuthentication().getName())
+	            .orElseThrow(() -> new ResourceNotFoundException("User Not Found"));
+		
+		List<WorkoutLog> log = workoutLogRepo.
+								findByUserAndLoggedAtBetweenOrderByLoggedAtAsc(
+									user, 
+									LocalDate.now().atStartOfDay(),
+									LocalDate.now().atTime(23, 59, 59)
+								);
+		
+		if(log.isEmpty()) {
+			return false;
+		}
+		return true;
 	}
 
 }

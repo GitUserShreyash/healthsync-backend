@@ -14,4 +14,6 @@ public interface IWorkoutService {
     String delete(Long id);
     
     WorkoutSummaryResponse getWorkoutSummary();
+    
+    Boolean getTodayStatus();
 }

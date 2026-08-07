@@ -59,4 +59,9 @@ public class WorkoutController {
 	public ResponseEntity<WorkoutPlanResponse> getTodayWorkout() {
 	    return ResponseEntity.ok(workoutPlanService.getTodayWorkout());
 	}
+	
+	@GetMapping("/today/status")
+	public ResponseEntity<Boolean> getTodaysLoggedWorkout(){
+		return ResponseEntity.ok(workoutService.getTodayStatus());
+	}
 }

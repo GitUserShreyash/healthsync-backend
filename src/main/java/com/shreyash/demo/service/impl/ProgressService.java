@@ -116,7 +116,9 @@ public class ProgressService {
 
 	    List<WeightDataPointDto> history = new ArrayList<>();
 
-	    Double lastWeight = null;
+	    Double lastWeight = metricRepo.findTopByUserAndRecordedAtBeforeOrderByRecordedAtDesc(user, startDate.atStartOfDay())
+	            .map(BodyMetrics::getWeightKg)
+	            .orElse(null);
 
 
 	    for(LocalDate date = startDate;
@@ -343,7 +345,9 @@ public class ProgressService {
 
 	    List<BmiDataPointDto> history = new ArrayList<>();
 
-	    Double lastBmi = null;
+	    Double lastBmi = metricRepo.findTopByUserAndRecordedAtBeforeOrderByRecordedAtDesc(user, startDate.atStartOfDay())
+	            .map(BodyMetrics::getBmi)
+	            .orElse(null);
 
 
 	    for (LocalDate date = startDate;
@@ -393,7 +397,7 @@ public class ProgressService {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		User user = userRepo.findByUsername(username).orElseThrow(()-> new RuntimeException("User Not Found"));
 		LocalDate endDate = LocalDate.now();
-	    LocalDate startDate = endDate.minusDays(days);
+	    LocalDate startDate = endDate.minusDays(days-1);
 	    
 		return new ProgressResponse(
 				getWeightProgress(user, startDate, endDate),
