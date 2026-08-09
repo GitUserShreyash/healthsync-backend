@@ -22,6 +22,9 @@ public class EmailServiceImpl implements IEmailService {
 
 	@Override
 	public void sendEmail(String to, String subject, String body) {
+		System.out.println("========== SEND EMAIL CALLED ==========");
+	    System.out.println("Recipient: " + to);
+	    System.out.println("Subject: " + subject);
 		Email email = new Email();
 		email.setMessage(body);
 		email.setSubject(subject);
@@ -34,10 +37,13 @@ public class EmailServiceImpl implements IEmailService {
 			sms.setTo(to);
 			sms.setText(body);
 			
+			System.out.println("========== CALLING MAIL SENDER ==========");
 			mailSender.send(sms);
+			System.out.println("========== EMAIL SENT ==========");
 			email.setStatus("Success");
 			System.out.println("email sent successfully...");
 		} catch (Exception e) {
+			System.out.println("========== EMAIL FAILED ==========");
 			email.setStatus("Failure");
 			System.out.println("email could not be sent...");
 			e.printStackTrace();
