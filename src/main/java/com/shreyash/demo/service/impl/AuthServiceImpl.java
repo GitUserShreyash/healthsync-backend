@@ -62,6 +62,7 @@ public class AuthServiceImpl implements IAuthService{
 			throw new RuntimeException("email already exists");
 		}
 		
+		
 		User user = new User();
 		user.setEmail(req.getEmail());
 		user.setUsername(req.getUsername());
@@ -94,7 +95,7 @@ public class AuthServiceImpl implements IAuthService{
 
 		        This OTP is valid for 10 minutes. Please do not share this code with anyone for security reasons.
 
-		        If you did not create a FitFuel account, please ignore this email.
+		        If you did not create a HealthSync account, please ignore this email.
 
 		        Regards,
 		        HealthSync Team
