@@ -54,7 +54,13 @@ public class NutritionLogServiceImpl implements INutritionLogService {
 		
 		User user = userRepo.findByUsername(username).orElseThrow(()-> new RuntimeException("User not found"));
 		
-		return nutritionLogRepo.findByUserAndLoggedAtGreaterThanEqualOrderByLoggedAtDesc(user,LocalDate.now().atStartOfDay()).stream().map(nutritionLogMapper::toDto).toList();
+		return nutritionLogRepo.findByUserAndLoggedAtGreaterThanEqualOrderByLoggedAtDesc(
+				user,
+				LocalDate.now()
+					.atStartOfDay())
+					.stream()
+					.map(nutritionLogMapper::toDto)
+					.toList();
 	}
 
 	@Override

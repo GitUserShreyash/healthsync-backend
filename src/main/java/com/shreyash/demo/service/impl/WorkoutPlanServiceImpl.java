@@ -5,8 +5,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -176,6 +178,12 @@ public class WorkoutPlanServiceImpl implements IWorkoutPlanService {
 	    User user = userRepo.findByUsername(username)
 	            .orElseThrow(() ->
 	                    new RuntimeException("User not found"));
+	    System.out.println("User: " + user.getUsername());
+	    Optional<UserProfile> p = profileRepo.findByUser(user);
+	    if(p.isEmpty()) {
+	    	System.out.println("Profile null");
+	    }
+	    System.out.println("Goal: " + p.get().getGoal());
 	    
 	    DayOfWeek today = LocalDate.now().getDayOfWeek();
 

@@ -16,4 +16,6 @@ public interface IWorkoutService {
     WorkoutSummaryResponse getWorkoutSummary();
     
     Boolean getTodayStatus();
+    
+    
 }

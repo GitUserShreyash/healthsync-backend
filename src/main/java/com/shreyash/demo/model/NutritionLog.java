@@ -44,6 +44,10 @@ public class NutritionLog {
     private Double fat;
 
     private Double fiber;
+    
+    private Double sugar;
+    
+    private Double sodium;
 
     private LocalDateTime loggedAt;
 }

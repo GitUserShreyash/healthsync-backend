@@ -37,4 +37,12 @@ public class NutritionLogRequest {
     @NotNull(message = "Fiber is required")
     @PositiveOrZero(message = "Fiber cannot be negative")
     private Double fiber;
+    
+    @NotNull(message = "Sodium is required")
+    @PositiveOrZero(message = "Sodium cannot be negative")
+    private Double sodium;
+    
+    @NotNull(message = "Sugar is required")
+    @PositiveOrZero(message = "Sugar cannot be negative")
+    private Double sugar;
 }
