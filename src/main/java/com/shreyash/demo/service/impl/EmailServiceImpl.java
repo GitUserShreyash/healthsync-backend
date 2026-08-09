@@ -40,7 +40,7 @@ public class EmailServiceImpl implements IEmailService {
 		} catch (Exception e) {
 			email.setStatus("Failure");
 			System.out.println("email could not be sent...");
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 		
 		emailRepo.save(email);
