@@ -44,6 +44,8 @@ public class UserProfile {
     private User user;
 
     private Integer age;
+    
+    private String appName;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;

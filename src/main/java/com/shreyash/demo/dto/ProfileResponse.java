@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProfileResponse {
+	private String appName;
     private Integer age;
     private Gender gender;
     private Double heightCm;

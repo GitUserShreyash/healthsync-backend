@@ -1,6 +1,7 @@
 package com.shreyash.demo.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import com.shreyash.demo.dto.ResetPasswordRequest;
 import com.shreyash.demo.dto.SignupRequest;
 import com.shreyash.demo.dto.UserResponse;
 import com.shreyash.demo.dto.VerifyEmailRequest;
+import com.shreyash.demo.exception.DuplicateResourceException;
 import com.shreyash.demo.mapper.DTOMapper;
 import com.shreyash.demo.model.EmailVerificationToken;
 import com.shreyash.demo.model.PasswordResetToken;
@@ -58,9 +60,56 @@ public class AuthServiceImpl implements IAuthService{
 			throw new RuntimeException("Username already exists");
 		}
 		
-		if(userRepo.existsByEmail(req.getEmail())) {
-			throw new RuntimeException("email already exists");
-		}
+		Optional<User> existingUser = userRepo.findByEmail(req.getEmail());
+
+	    if (existingUser.isPresent()) {
+
+	        User user = existingUser.get();
+
+	        EmailVerificationToken token = emailTokenRepo
+	                .findTopByUserOrderByCreatedAtDesc(user)
+	                .orElseThrow(() -> new RuntimeException(
+	                        "Verification token not found"
+	                ));
+
+	        if (token.getVerified()) {
+	            throw new DuplicateResourceException("Email already exists");
+	        }
+
+	        // Existing user is not verified → generate new OTP
+	        String genOTP = generateOTP();
+
+	        token.setOtp(genOTP);
+	        token.setExpiresAt(LocalDateTime.now().plusMinutes(10));
+	        token.setVerified(false);
+	        token.setCreatedAt(LocalDateTime.now());
+
+	        emailTokenRepo.save(token);
+
+	        String subject = "Verify Your Email Address - HealthSync OTP";
+
+	        String body = """
+	                Hello,
+
+	                Thank you for registering with HealthSync.
+
+	                To complete your email verification, please use the following One-Time Password (OTP):
+
+	                OTP: %s
+
+	                This OTP is valid for 10 minutes.
+
+	                If you did not create a HealthSync account, please ignore this email.
+
+	                Regards,
+	                HealthSync Team
+	                Your Personal Fitness & Nutrition Companion
+	                """.formatted(genOTP);
+
+	        emailService.sendEmail(user.getEmail(), subject, body);
+
+	        return "OTP sent Successful";
+	    }
 		
 		
 		User user = new User();
