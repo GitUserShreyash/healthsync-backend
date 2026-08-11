@@ -36,6 +36,7 @@ public class DashboardService {
 		resp.setDailyWaterGoalL(profile.getRecommendedWaterIntakeL());
 		resp.setGoal(profile.getGoal());
 		resp.setCaloriesConsumedToday(nutritionService.getTodayCalories());
+		resp.setAppName(profile.getAppName());
 		return resp;
 	}
 }

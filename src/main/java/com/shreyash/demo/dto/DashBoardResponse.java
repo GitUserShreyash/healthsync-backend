@@ -28,4 +28,6 @@ public class DashBoardResponse {
     
     //not implemented : wait for AI module for user specific recommendation 
     private String recommendation;
+    
+    private String appName;
 }
