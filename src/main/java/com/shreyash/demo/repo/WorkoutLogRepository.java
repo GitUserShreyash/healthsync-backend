@@ -18,7 +18,7 @@ public interface WorkoutLogRepository extends JpaRepository<WorkoutLog, Long> {
     
     List<WorkoutLog> findTop30ByUserOrderByLoggedAtDesc(User user);
     
-    long countByUserAndLoggedAtBetween(
+    Integer countByUserAndLoggedAtBetween(
             User user,
             LocalDateTime start,
             LocalDateTime end);
