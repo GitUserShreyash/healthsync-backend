@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.shreyash.demo.dto.WorkoutLogRequest;
 import com.shreyash.demo.dto.WorkoutLogResponse;
 import com.shreyash.demo.dto.WorkoutSummaryResponse;
+import com.shreyash.demo.exception.DuplicateResourceException;
 import com.shreyash.demo.exception.ResourceNotFoundException;
 import com.shreyash.demo.mapper.WorkoutLogMapper;
 import com.shreyash.demo.model.User;
@@ -79,7 +80,10 @@ public class WorkoutServiceImpl implements IWorkoutService {
 		UserProfile profile = userProfileRepo.findByUser(user).orElseThrow(()-> new RuntimeException("User profile not found"));
 		
 		System.out.println(req.toString());
-		
+		List<WorkoutLog> todaysLog = workoutLogRepo.findByUserAndLoggedAtBetweenOrderByLoggedAtAsc(user, LocalDate.now().atStartOfDay(), LocalDate.now().atTime(23, 59, 59));
+		if(todaysLog.size()==1) {
+			throw new DuplicateResourceException("Workout is already logged");
+		}
 		WorkoutLog log = mapper.toEntity(req);
 		log.setUser(user);
 		log.setCompleted(true);
