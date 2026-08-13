@@ -208,6 +208,15 @@ public class AuthServiceImpl implements IAuthService{
 		
 		PasswordResetToken token = passwordResetRepo.findTopByUserOrderByCreatedAtDesc(user).orElseThrow(()->new RuntimeException("OTP not found"));
 		
+		if (!token.getOtp().equals(req.getOtp())) {
+		    throw new RuntimeException("Invalid OTP");
+		}
+
+		if (LocalDateTime.now().isAfter(token.getExpiresAt())) {
+		    passwordResetRepo.delete(token);
+		    throw new RuntimeException("OTP expired");
+		}
+		
 		if(!req.getNewPassword().equals(req.getConfirmPassword())) {
 			throw new RuntimeException("Passwords do not match");
 		}
