@@ -195,9 +195,13 @@ public class AuthServiceImpl implements IAuthService{
 		String OTP = generateOTP();
 		
 		PasswordResetToken token = new PasswordResetToken();
+		
 		token.setOtp(OTP);
 		token.setExpiresAt(LocalDateTime.now().plusMinutes(10));
 		token.setUser(user);
+		
+		passwordResetRepo.save(token);
+		
 		emailService.sendResetLink(user.getEmail(), OTP);
 		
 		return "Password reset OTP sent.";
